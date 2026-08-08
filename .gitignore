@@ -1,0 +1,84 @@
+# LaTeX auxiliary files
+# Patterns are unanchored, so they match at any depth (e.g. build/paper.aux).
+
+## Core auxiliary files
+*.aux
+*.lof          # list of figures
+*.log
+*.lot          # list of tables
+*.fls
+*.out          # hyperref
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+.*.lb
+
+## Intermediate documents
+*.dvi
+*.xdv
+*-converted-to.*
+# Keep .pdf if you commit the built PDF; otherwise uncomment:
+# *.pdf
+
+## Bibliography
+*.bbl          # comment out if you submit to a venue that wants the .bbl
+*.bcf          # biber
+*.blg
+*.run.xml
+*-blx.bib
+
+## Build tools
+*.synctex
+*.synctex(busy)
+*.synctex.gz
+*.synctex.gz(busy)
+*.pdfsync
+*.fdb_latexmk  # latexmk file database
+*.latexmk      # latexmk rc/state files
+.pgf-plot.gnuplot
+
+## Glossaries / index / nomenclature
+*.acn
+*.acr
+*.alg
+*.glg
+*.glo
+*.gls
+*.glsdefs
+*.ist
+*.idx
+*.ilg
+*.ind
+*.nlg
+*.nlo
+*.nls
+
+## Package-specific leftovers
+*.brf          # beamerarticle / hyperref backref
+*.vrb          # beamer notes
+*.nav          # beamer
+*.snm          # beamer
+*.tps          # todonotes
+*.loa          # algorithms list
+*.thm          # ntheorem
+*.dpth         # cutwin
+*.md5
+*.auxlock      # externalized TikZ
+*.figlist
+*.makefile
+*.pre
+
+## minted / pygmentize / knitr
+_minted*/
+*.pyg
+*-tikzDictionary
+
+## Editor / misc
+*.bak
+*.sav
+*.tmp
+
+## Project-specific
+ejemplos/      # ignores any folder named "ejemplos" at any depth
