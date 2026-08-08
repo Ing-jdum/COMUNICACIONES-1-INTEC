@@ -1,0 +1,167 @@
+{
+  "experiment": {
+    "name": "DTMF Signal Simulation and Analysis",
+    "description": "Simulation of DTMF tone generation, spectral analysis, noise effects, spectral resolution, automatic decoding, and line attenuation.",
+    "sequence": "582A*",
+    "target_digit": "5"
+  },
+  "sampling": {
+    "sampling_frequency_hz": 8000,
+    "sampling_period_seconds": 0.000125,
+    "tone_duration_seconds": 0.25,
+    "silence_duration_seconds": 0.05,
+    "nyquist_frequency_hz": 4000
+  },
+  "dtmf": {
+    "low_group_frequencies_hz": [
+      697,
+      770,
+      852,
+      941
+    ],
+    "high_group_frequencies_hz": [
+      1209,
+      1336,
+      1477,
+      1633
+    ],
+    "target_digit": "5",
+    "target_low_frequency_hz": 770,
+    "target_high_frequency_hz": 1336
+  },
+  "fft_analysis": {
+    "fft_length": 2000,
+    "frequency_resolution_hz": 4,
+    "expected_low_frequency_hz": 770,
+    "expected_high_frequency_hz": 1336,
+    "detected_low_frequency_hz": 768,
+    "detected_high_frequency_hz": 1336,
+    "low_frequency_error_percent": 0.25974025974025972,
+    "high_frequency_error_percent": 0
+  },
+  "noise_analysis": {
+    "snr_levels_db": [
+      30,
+      20,
+      10,
+      0
+    ],
+    "description": "White Gaussian noise is added to the target DTMF tone to evaluate spectral robustness."
+  },
+  "duration_analysis": {
+    "tested_durations_seconds": [
+      0.05,
+      0.1,
+      0.25,
+      0.5
+    ],
+    "theoretical_frequency_resolution_hz": [
+      20,
+      10,
+      4,
+      2
+    ],
+    "description": "Shorter signals provide poorer frequency resolution, while longer observation times improve separation of the DTMF frequency components."
+  },
+  "decoder": {
+    "expected_sequence": "582A*",
+    "results": [
+      {
+        "position": 1,
+        "expected_digit": "5",
+        "detected_digit": "5",
+        "detected_low_frequency_hz": 768,
+        "detected_high_frequency_hz": 1336,
+        "correct": true
+      },
+      {
+        "position": 2,
+        "expected_digit": "8",
+        "detected_digit": "8",
+        "detected_low_frequency_hz": 852,
+        "detected_high_frequency_hz": 1336,
+        "correct": true
+      },
+      {
+        "position": 3,
+        "expected_digit": "2",
+        "detected_digit": "2",
+        "detected_low_frequency_hz": 696,
+        "detected_high_frequency_hz": 1336,
+        "correct": true
+      },
+      {
+        "position": 4,
+        "expected_digit": "A",
+        "detected_digit": "A",
+        "detected_low_frequency_hz": 696,
+        "detected_high_frequency_hz": 1632,
+        "correct": true
+      },
+      {
+        "position": 5,
+        "expected_digit": "*",
+        "detected_digit": "*",
+        "detected_low_frequency_hz": 940,
+        "detected_high_frequency_hz": 1208,
+        "correct": true
+      }
+    ]
+  },
+  "attenuation": {
+    "attenuation_levels_db": [
+      0,
+      -6,
+      -12,
+      -20
+    ],
+    "description": "Amplitude attenuation is applied to the target DTMF signal to simulate transmission losses."
+  },
+  "expected_observations": [
+    "The DTMF digit \"5\" should contain two dominant frequency components at 770 Hz and 1336 Hz.",
+    "The time-domain signal is the sum of two sinusoidal signals.",
+    "The FFT should show two dominant spectral peaks corresponding to the low and high DTMF groups.",
+    "Increasing SNR should make the two DTMF spectral peaks easier to distinguish.",
+    "Decreasing tone duration reduces FFT frequency resolution.",
+    "Line attenuation reduces signal amplitude but should not change the theoretical DTMF frequencies.",
+    "The decoder should identify the sequence \"582A*\" from the generated signal."
+  ],
+  "images": [
+    {
+      "file": "01_time_domain_digit.png",
+      "type": "time_domain",
+      "description": "First 200 samples of the target DTMF digit in the time domain.",
+      "expected_features": "Superposition of two sinusoidal components."
+    },
+    {
+      "file": "02_time_domain_complete_sequence.png",
+      "type": "time_domain_sequence",
+      "description": "Complete simulated DTMF dialing sequence including tones and silence intervals.",
+      "expected_features": "Five DTMF tones separated by silence intervals."
+    },
+    {
+      "file": "03_fft_spectrum_digit.png",
+      "type": "frequency_domain",
+      "description": "FFT spectrum of the target DTMF digit with expected and detected frequencies marked.",
+      "expected_features": "Two dominant peaks near the theoretical low and high DTMF frequencies."
+    },
+    {
+      "file": "04_awgn_spectrum_SNR.png",
+      "type": "noise_analysis",
+      "description": "Frequency spectrum of the DTMF signal after addition of white Gaussian noise.",
+      "expected_features": "Noise floor increases as SNR decreases."
+    },
+    {
+      "file": "05_fft_resolution_duration.png",
+      "type": "frequency_resolution",
+      "description": "FFT spectrum for different DTMF tone durations.",
+      "expected_features": "Longer signals produce narrower spectral peaks."
+    },
+    {
+      "file": "06_line_attenuation.png",
+      "type": "attenuation_analysis",
+      "description": "Time-domain DTMF signal after different transmission attenuation levels.",
+      "expected_features": "Signal amplitude decreases as attenuation becomes more negative."
+    }
+  ]
+}

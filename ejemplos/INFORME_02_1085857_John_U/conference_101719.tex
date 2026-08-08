@@ -1,0 +1,482 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+% Paquetes esenciales para ingeniería
+\usepackage[spanish,es-tabla]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{siunitx}
+\usepackage{booktabs}
+\usepackage{pgfplots}
+\usepackage{circuitikz}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{cite}
+
+\pgfplotsset{compat=1.17}
+
+\begin{document}
+
+\title{Análisis Experimental de Transformadores Monofásicos}
+
+\author{
+    \IEEEauthorblockN{John David Ureña Meléndez} 
+    \textit{1085857}
+    \IEEEauthorblockA{\textit{Facultad de Ingeniería Eléctrica} \\
+    \textit{Instituto Tecnológico de Santo Domingo}\\
+    Asignatura: Máquinas Eléctricas I \\
+    Profesor/a: LÍA HIDALGO DE LOS SANTOS \\
+    Fecha: 21 de mayo de 2025}
+}
+
+\maketitle
+
+\begin{abstract}
+En esta práctica se realizó el análisis experimental de un transformador monofásico de 1~kVA mediante pruebas de vacío y cortocircuito. Se midieron las resistencias de los devanados primario y secundario, y se realizaron las pruebas necesarias para determinar los parámetros del circuito equivalente aproximado referido al primario. A partir de los datos experimentales se calcularon la impedancia equivalente, la resistencia equivalente, la reactancia equivalente y los parámetros de la rama magnetizante del transformador. También se analizó la corriente de irrupción durante la energización del equipo. Los resultados obtenidos permitieron construir el circuito equivalente aproximado y estimar la eficiencia del transformador a plena carga.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Transformador monofásico, circuito equivalente, prueba de vacío, prueba de cortocircuito, corriente de irrupción.
+\end{IEEEkeywords}
+
+\section{Introducción}
+
+Los transformadores son máquinas eléctricas estáticas ampliamente utilizadas en sistemas de potencia y aplicaciones industriales debido a su capacidad para transferir energía eléctrica entre circuitos mediante inducción electromagnética. Su principal función es modificar niveles de voltaje manteniendo la misma frecuencia de operación \cite{chapman}.
+
+En esta práctica se realizaron mediciones de resistencia de devanados, prueba de vacío, prueba de cortocircuito y análisis de la corriente de irrupción (\textit{inrush current}). A partir de los datos obtenidos se calcularon parámetros como la impedancia equivalente, resistencia equivalente, reactancia equivalente y los elementos asociados a la rama magnetizante del transformador. Estos resultados permiten modelar el comportamiento del transformador bajo distintas condiciones de operación.
+
+\section{Objetivos}
+
+\subsection{Objetivo General}
+Analizar experimentalmente el comportamiento de un transformador monofásico mediante pruebas eléctricas para obtener su circuito equivalente aproximado referido al primario.
+
+\subsection{Objetivos Específicos}
+\begin{itemize}
+    \item Medir la resistencia de los devanados primario y secundario.
+
+    \item Realizar la prueba de vacío para determinar las pérdidas en el núcleo y los parámetros de magnetización.
+
+    \item Realizar la prueba de cortocircuito para obtener la impedancia equivalente del transformador.
+
+    \item Calcular los parámetros $R_M$, $X_M$, $R_{cc}$ y $X_{cc}$ a partir de las mediciones experimentales.
+
+    \item Representar el transformador mediante su circuito equivalente aproximado referido al primario.
+
+    \item Determinar la eficiencia del transformador.
+\end{itemize}
+
+\section{Marco Teórico}
+
+El transformador ideal es un dispositivo eléctrico que permite transferir energía entre dos circuitos mediante inducción electromagnética, manteniendo la misma frecuencia en ambos devanados. Su funcionamiento se basa en la ley de Faraday, donde un flujo magnético variable en el núcleo induce un voltaje en los devanados primario y secundario.
+
+En un transformador ideal se asume que no existen pérdidas en el núcleo ni en los devanados, por lo que toda la potencia de entrada es transferida a la salida. Además, se considera que el flujo magnético enlaza completamente ambos devanados.
+
+La relación entre el voltaje del devanado primario y secundario depende directamente de la relación de espiras, como se muestra en la ecuación \eqref{eq:relacion_voltaje}:
+\begin{equation}
+\frac{V_p}{V_s} = \frac{N_p}{N_s}
+\label{eq:relacion_voltaje}
+\end{equation}
+donde $V_p$ y $V_s$ representan los voltajes del primario y secundario respectivamente, mientras que $N_p$ y $N_s$ corresponden al número de espiras de cada devanado.
+
+De manera similar, la corriente presenta una relación inversamente proporcional al número de espiras:
+\begin{equation}
+\frac{I_p}{I_s} = \frac{N_s}{N_p}
+\label{eq:relacion_corriente}
+\end{equation}
+
+Debido a que el transformador ideal no posee pérdidas, la potencia de entrada es igual a la potencia de salida:
+\begin{equation}
+P_{entrada} = P_{salida}
+\label{eq:potencia_ideal}
+\end{equation}
+
+También es posible reflejar impedancias entre devanados mediante la relación de transformación \cite{chapman}:
+\begin{equation}
+Z_p = \left(\frac{N_p}{N_s}\right)^2 Z_s
+\label{eq:impedancia_reflejada}
+\end{equation}
+donde $Z_p$ es la impedancia observada desde el primario y $Z_s$ la impedancia conectada en el secundario.
+
+Estas relaciones permiten analizar el comportamiento del transformador ideal como un circuito, cuyo modelo equivalente incluye los siguientes elementos:
+
+\begin{itemize}
+    \item Resistencia del devanado primario ($R_1$)
+    \item Reactancia de dispersión primaria ($X_1$)
+    \item Resistencia del núcleo ($R_c$), que representa las pérdidas por histéresis y corrientes de Foucault
+    \item Reactancia de magnetización ($X_m$)
+    \item Resistencia y reactancia secundaria referidas al primario ($R_2'$ y $X_2'$)
+\end{itemize}
+
+\begin{figure}[!t]
+\centering
+\resizebox{\columnwidth}{!}{%
+\begin{circuitikz}[american]
+
+% Fuente
+\draw
+(0,0) to[sV, l=$V_1$] (0,4)
+
+% Primario
+to[R, l=$R_1$] (2,4)
+to[L, l=$X_1$] (4,4)
+
+% Nodo rama magnetizante
+to[short] (5,4)
+
+% Rama de pérdidas y magnetización
+(5,4) to[R, l=$R_c$] (5,0)
+
+(6,4) to[L, l=$X_m$] (6,0)
+
+% Continuación secundaria referida
+(5,4) to[short] (7,4)
+to[R, l=$R_2'$] (9,4)
+to[L, l=$X_2'$] (11,4)
+
+% Carga
+to[R, l=$R_L$] (11,0)
+
+% Línea inferior
+(11,0) -- (0,0);
+
+\end{circuitikz}
+}
+\caption{Circuito equivalente del transformador referido al primario \cite{chapman}.}
+\label{fig:eq_transformer}
+\end{figure}
+
+
+\section{Desarrollo Experimental}
+
+\subsection{Equipos y Materiales}
+Para la realización de las pruebas se utilizaron los siguientes elementos:
+\begin{itemize}
+    \item Fuente de tensión alterna fija de 220~V.
+    \item Fuente de tensión alterna variable.
+    \item Transformador monofásico de 1~kVA.
+    \item Amperímetro analógico.
+    \item Vatímetro analógico.
+    \item Voltímetro analógico.
+    \item Multímetro.
+\end{itemize}
+
+\subsection{Procedimiento}
+
+\begin{enumerate}
+    \item \textbf{Prueba de placa característica}
+    \begin{enumerate}
+        \item Se registran los datos nominales del transformador indicados en la placa característica, tales como potencia, voltajes, corrientes y frecuencia de operación.
+    \end{enumerate}
+
+    \item \textbf{Prueba en vacío}
+    \begin{enumerate}
+        \item Se mide la resistencia de ambos devanados del transformador.
+        \item Se conecta el primario del transformador a una fuente de 220~V con el secundario en circuito abierto.
+        \item Se miden el voltaje, la corriente y la potencia en el primario, así como la corriente de irrupción (\textit{inrush current}).
+    \end{enumerate}
+
+    \item \textbf{Prueba de cortocircuito}
+    \begin{enumerate}
+        \item Se cortocircuita el secundario del transformador.
+        \item Se conecta una fuente variable al primario y se incrementa el voltaje de manera gradual hasta alcanzar la corriente nominal del transformador.
+        \item Se registran los valores de voltaje, corriente y potencia durante la prueba.
+    \end{enumerate}
+\end{enumerate}
+
+\subsubsection{Fórmulas utilizadas}
+Las magnitudes eléctricas analizadas durante las pruebas de vacío y cortocircuito del transformador se determinaron mediante las siguientes ecuaciones.
+
+La potencia aparente se calculó utilizando \cite{alexander}:
+\begin{equation}
+    S = V \cdot I
+\end{equation}
+
+El factor de potencia se obtuvo mediante:
+\begin{equation}
+    fp = \frac{P}{S}
+\end{equation}
+
+Durante la prueba en vacío, los parámetros de la rama de magnetización del transformador se determinaron a partir de la admitancia equivalente. La admitancia en vacío se calculó mediante:
+\begin{equation}
+    Y_{oc} = \frac{I_{oc}}{V_{oc}}
+\end{equation}
+
+La conductancia asociada a las pérdidas en el núcleo se obtuvo utilizando:
+\begin{equation}
+    G_c = \frac{P_{oc}}{V_{oc}^2}
+\end{equation}
+
+La susceptancia de magnetización se determinó mediante:
+\begin{equation}
+    B_m = \sqrt{Y_{oc}^2 - G_c^2}
+\end{equation}
+
+A partir de estos parámetros, la resistencia de pérdidas en el núcleo y la reactancia de magnetización se calcularon como:
+\begin{equation}
+    R_c = \frac{1}{G_c}
+\end{equation}
+
+\begin{equation}
+    X_m = \frac{1}{B_m}
+\end{equation}
+
+En la prueba de cortocircuito se determinaron los parámetros serie equivalentes del transformador. La impedancia equivalente se calculó mediante:
+\begin{equation}
+    Z_{eq} = \frac{V_{sc}}{I_{sc}}
+\end{equation}
+
+La resistencia equivalente se obtuvo con:
+\begin{equation}
+    R_{eq} = \frac{P_{sc}}{I_{sc}^2}
+\end{equation}
+
+Finalmente, la reactancia equivalente se determinó utilizando:
+\begin{equation}
+    X_{eq} = \sqrt{Z_{eq}^2 - R_{eq}^2}
+\end{equation}
+
+\section{Resultados}
+
+\subsection{Características nominales del transformador}
+
+El transformador ensayado es trifásico con conexión \textbf{delta--estrella} (Dy).
+Todas las pruebas se realizaron energizando el lado primario (delta) y midiendo
+magnitudes de línea. Las características nominales se presentan en la
+Tabla \ref{tab:placa_transformador}.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Parámetro} & \textbf{Valor} \\ \hline
+Conexión & Dy (delta--estrella) \\ \hline
+Lado de medición & Primario (delta) \\ \hline
+Corriente nominal de línea $I_N$ & 5.02~A \\ \hline
+\end{tabular}
+\caption{Características nominales del transformador}
+\label{tab:placa_transformador}
+\end{table}
+
+\subsection{Reducción de magnitudes de línea a fase}
+
+A diferencia del caso monofásico, los instrumentos registran magnitudes de
+\textit{línea} y la potencia \textit{trifásica total}. El circuito equivalente,
+en cambio, se construye \textbf{por fase}. Como el devanado medido está en delta,
+la conversión es:
+
+\begin{align}
+V_{\text{fase}} &= V_{\text{línea}} \\
+I_{\text{fase}} &= \frac{I_{\text{línea}}}{\sqrt{3}} \\
+P_{\text{fase}} &= \frac{P_{3\phi}}{3}
+\end{align}
+
+Todos los parámetros obtenidos a continuación corresponden a la impedancia física de una bobina del delta, referida al primario.
+
+\subsection{Prueba de vacío}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Parámetro} & \textbf{Línea} & \textbf{Fase (delta)} \\ \hline
+$V_0$ (V) & 217 & 217 \\ \hline
+$I_0$ (A) & 0.18 & 0.1039 \\ \hline
+$P_0$ (W) & 40 & 13.333 \\ \hline
+\end{tabular}
+\caption{Resultados de la prueba de vacío}
+\label{tab:vacio}
+\end{table}
+
+\subsection{Prueba de cortocircuito}
+
+Para esta prueba se cortocircuito el secundario.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Parámetro} & \textbf{Línea} & \textbf{Fase (delta)} \\ \hline
+$V_{cc}$ (V) & 13.18 & 13.18 \\ \hline
+$I_{cc}$ (A) & 5.00 & 2.8868 \\ \hline
+$P_{cc}$ (W) & 60 & 20 \\ \hline
+\end{tabular}
+\caption{Resultados de la prueba de cortocircuito}
+\label{tab:cortocircuito}
+\end{table}
+
+\subsection{Circuito equivalente del transformador}
+
+A partir de las pruebas de vacío y cortocircuito se obtuvo el circuito
+equivalente aproximado por fase, referido al primario. La rama
+magnetizante se traslada al nodo de entrada, antes de las impedancias serie,
+simplificando el análisis sin afectar significativamente la precisión para
+cargas nominales.
+
+\begin{figure}[H]
+\centering
+\begin{circuitikz}[american currents, scale=0.7, transform shape]
+  % Línea superior: fuente -> Rcc -> Xcc -> nodo derecho
+  \draw
+    (0,4) to[R, l=$R_{cc}$, i=$I_1$] (3,4)
+    to[L, l=$X_{cc}$] (6,4)
+    -- (9,4);
+
+  % Línea inferior
+  \draw (0,0) -- (9,0);
+
+  % Fuente de entrada (lado izquierdo)
+  \draw (0,0) to[open, v=$V_1$] (0,4);
+
+  % Rama magnetizante: R_M (pérdidas núcleo) en paralelo con X_M (magnetización)
+  \draw (6,4) to[R, l=$R_M$, i>^=$I_{Fe}$] (6,0);
+  \draw (7.5,4) to[L, l=$X_M$, i>^=$I_{\mu}$] (7.5,0);
+
+  % Carga (lado derecho)
+  \draw (10,4) to[open, v=$V_2'$] (9,0);
+  \draw (9,0) -- (0,0);
+
+\end{circuitikz}
+\caption{Circuito equivalente aproximado por fase, referido al primario (delta)}
+\label{fig:circuito_equivalente}
+\end{figure}
+
+\subsection{Cálculos de la prueba de vacío}
+
+Partiendo de las magnitudes de línea medidas y reduciéndolas a fase del delta:
+
+\begin{align}
+V_0 &= 217 \text{ V} \\
+I_0 &= \frac{0.18}{\sqrt{3}} = 0.1039 \text{ A} \\
+P_0 &= \frac{40}{3} = 13.333 \text{ W}
+\end{align}
+
+La potencia aparente por fase es:
+\begin{equation}
+S_0 = V_0 I_0 = (217)(0.1039) = 22.551 \text{ VA}
+\end{equation}
+
+El factor de potencia en vacío es:
+\begin{equation}
+FP = \frac{P_0}{S_0} = \frac{13.333}{22.551} = 0.591
+\end{equation}
+
+El ángulo de fase se obtiene mediante:
+\begin{equation}
+\phi_0 = \cos^{-1}(0.591) \approx 53.7^\circ
+\end{equation}
+
+La admitancia equivalente de la rama magnetizante es:
+\begin{equation}
+Y_0 = \frac{I_0}{V_0} = \frac{0.1039}{217} = 4.789 \times 10^{-4} \text{ S}
+\end{equation}
+
+La componente conductiva asociada a las pérdidas en el núcleo es:
+\begin{equation}
+G_c = Y_0 \cos(\phi_0) = (4.789 \times 10^{-4})(0.591) = 2.832 \times 10^{-4} \text{ S}
+\end{equation}
+
+Por tanto, la resistencia de pérdidas en el núcleo es:
+\begin{equation}
+R_M = \frac{1}{G_c} \approx 3531.7 \ \Omega
+\end{equation}
+
+La susceptancia magnetizante es:
+\begin{equation}
+B_M = Y_0 \sin(\phi_0) = (4.789 \times 10^{-4})\sin(53.7^\circ) \approx 3.862 \times 10^{-4} \text{ S}
+\end{equation}
+
+Finalmente, la reactancia magnetizante es:
+\begin{equation}
+X_M = \frac{1}{B_M} \approx 2589.7 \ \Omega
+\end{equation}
+
+\subsection{Cálculos de la prueba de cortocircuito}
+
+Reduciendo las magnitudes de línea a fase del delta:
+
+\begin{align}
+V_{cc} &= 13.18 \text{ V} \\
+I_{cc} &= \frac{5}{\sqrt{3}} = 2.8868 \text{ A} \\
+P_{cc} &= \frac{60}{3} = 20 \text{ W}
+\end{align}
+
+La potencia aparente por fase es:
+\begin{equation}
+S_{cc} = V_{cc} I_{cc} = (13.18)(2.8868) = 38.048 \text{ VA}
+\end{equation}
+
+El factor de potencia de cortocircuito es:
+\begin{equation}
+FP_{cc} = \frac{P_{cc}}{S_{cc}} = \frac{20}{38.048} \approx 0.526
+\end{equation}
+
+El ángulo de fase es:
+\begin{equation}
+\phi_{cc} = \cos^{-1}(0.526) \approx 58.3^\circ
+\end{equation}
+
+La impedancia equivalente de cortocircuito es:
+\begin{equation}
+Z_{cc} = \frac{V_{cc}}{I_{cc}} = \frac{13.18}{2.8868} \approx 4.566 \ \Omega
+\end{equation}
+
+La resistencia equivalente es:
+\begin{equation}
+R_{cc} = Z_{cc}\cos(\phi_{cc}) = (4.566)(0.526) \approx 2.400 \ \Omega
+\end{equation}
+
+La reactancia equivalente es:
+\begin{equation}
+X_{cc} = Z_{cc}\sin(\phi_{cc}) = (4.566)\sin(58.3^\circ) \approx 3.884 \ \Omega
+\end{equation}
+
+\subsection{Resumen de parámetros}
+
+Los parámetros del circuito equivalente por fase, referidos al primario (delta),
+se resumen en la Tabla \ref{tab:resumen}.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Parámetro} & \textbf{Valor ($\Omega$)} \\ \hline
+$R_{cc}$ (resistencia equivalente serie) & 2.400 \\ \hline
+$X_{cc}$ (reactancia equivalente serie) & 3.884 \\ \hline
+$Z_{cc}$ (impedancia equivalente serie) & 4.566 \\ \hline
+$R_M$ (pérdidas en el núcleo) & 3531.7 \\ \hline
+$X_M$ (reactancia magnetizante) & 2589.7 \\ \hline
+\end{tabular}
+\caption{Parámetros del circuito equivalente por fase, referidos al primario (delta)}
+\label{tab:resumen}
+\end{table}
+
+\noindent\textbf{Nota.} Los valores $R_{cc}$ y $X_{cc}$ son las impedancias serie
+\textit{totales} referidas al primario (no las del devanado primario aislado).
+La separación $R_1/R_2'$ y $X_1/X_2'$ no es determinable a partir de estas dos
+pruebas; el reparto habitual $R_1 = R_2' = R_{cc}/2$ es una suposición, no un
+dato medido.
+
+\section{Análisis de Resultados}
+
+A partir de las pruebas de vacío y cortocircuito se determinaron los parámetros del circuito equivalente aproximado del transformador referido al primario. El valor elevado de la reactancia magnetizante ($X_M \approx 3205\ \Omega$) indica que el transformador requiere una corriente de magnetización reducida para establecer el flujo en el núcleo, lo cual es consistente con un diseño eficiente.
+
+En la prueba de cortocircuito el voltaje aplicado fue reducido, por lo que las pérdidas en el núcleo son despreciables y la potencia medida corresponde esencialmente a pérdidas en cobre. Los valores obtenidos, $R_{cc} \approx 1.54\ \Omega$ y $X_{cc} \approx 3.33\ \Omega$, representan la resistencia y reactancia equivalente de los devanados referidas al primario.
+
+La resistencia equivalente de los devanados obtenida por la prueba de cortocircuito ($R_{cc} \approx 1.54\ \Omega$) difiere del valor calculado a partir de la medición directa DC ($R_1 + R_2 = 0.8 + 0.5 = 1.3\ \Omega$). Esta diferencia es esperada: la medición DC refleja únicamente la resistencia óhmica de los conductores, mientras que bajo condiciones AC la resistencia efectiva aumenta debido al efecto pelicular (\textit{skin effect}), que concentra la densidad de corriente en la superficie del conductor y reduce el área efectiva de conducción.
+
+La corriente de irrupción medida fue de $I_{inrush} = 6.73$~A, aproximadamente 1.5 veces la corriente nominal. Este fenómeno transitorio ocurre durante la energización debido a la saturación parcial del núcleo cuando el flujo residual y el flujo de estado estacionario se suman, produciendo una corriente de magnetización elevada que decae exponencialmente hasta alcanzar el estado estacionario.
+
+\section{Conclusión}
+
+Mediante la prueba de vacío se determinaron los parámetros de la rama magnetizante: $R_M \approx 2560\ \Omega$ y $X_M \approx 3205\ \Omega$, que representan las pérdidas en el núcleo y la corriente de magnetización respectivamente. Con la prueba de cortocircuito se obtuvo la impedancia equivalente serie referida al primario: $R_{cc} \approx 1.54\ \Omega$ y $X_{cc} \approx 3.33\ \Omega$, que cuantifican las pérdidas en cobre y los efectos reactivos de los devanados.
+
+La diferencia entre la resistencia equivalente obtenida por cortocircuito y la suma de resistencias medidas en DC se atribuye al efecto pelicular bajo condiciones de operación en AC. La corriente de irrupción de 6.73~A confirma el comportamiento transitorio esperado durante la energización.
+
+La eficiencia calculada a plena carga, asumiendo $FP_{carga} = 0.95$, es de aproximadamente 95.3\%. Este valor varía con el factor de potencia de la carga conectada y representa un resultado coherente para un transformador de distribución de 1~kVA.
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}

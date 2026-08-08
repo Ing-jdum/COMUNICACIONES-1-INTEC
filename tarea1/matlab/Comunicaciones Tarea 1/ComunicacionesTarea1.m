@@ -1,178 +1,745 @@
-%% SIMULACIÓN Y ANÁLISIS DE SEÑALES DTMF EN MATLAB
+%% ============================================================
+% SIMULACIÓN Y ANÁLISIS DE SEÑALES DTMF
+% Automated image export + metadata for LLM/report generation
+% ============================================================
+
 clear; clc; close all;
 
-%% 1. PARÁMETROS GENERALES Y MAPEO DTMF
-Fs = 8000;                  % Frecuencia de muestreo (8 kHz estándar telefónico)
-duracion_tonos = 0.25;      % Duración estándar por tono (250 ms)
-duracion_silencio = 0.05;   % Silencio entre tonos (50 ms)
+%% ============================================================
+% 0. CONFIGURACIÓN DE RESULTADOS
+% ============================================================
 
-% Frecuencias de grupo bajo y alto (Hz)
+outputDir = fullfile(pwd, 'dtmf_results');
+
+if ~exist(outputDir, 'dir')
+    mkdir(outputDir);
+end
+
+imageDir = fullfile(outputDir, 'images');
+
+if ~exist(imageDir, 'dir')
+    mkdir(imageDir);
+end
+
+%% ============================================================
+% 1. PARÁMETROS GENERALES Y MAPEO DTMF
+% ============================================================
+
+Fs = 8000;
+duracion_tonos = 0.25;
+duracion_silencio = 0.05;
+
 f_bajas = [697, 770, 852, 941];
 f_altas = [1209, 1336, 1477, 1633];
 
-% Matriz de dígitos
 teclado = ['1','2','3','A';
            '4','5','6','B';
            '7','8','9','C';
            '*','0','#','D'];
 
-% Cadena de prueba a simular
 secuencia_marcado = '582A*';
 
-%% 2. GENERACIÓN Y ANÁLISIS EN EL DOMINIO DEL TIEMPO Y FRECUENCIA
+digito_objetivo = '5';
+
+%% ============================================================
+% 2. GENERACIÓN DE SEÑALES DTMF
+% ============================================================
+
 t_tono = 0:1/Fs:(duracion_tonos - 1/Fs);
 t_silencio = 0:1/Fs:(duracion_silencio - 1/Fs);
+
 silencio = zeros(size(t_silencio));
 
 senal_completa = [];
-digito_objetivo = '5'; % Dígito individual para análisis detallado
+
 dtmf_objetivo = [];
 
 for k = 1:length(secuencia_marcado)
+
     c = secuencia_marcado(k);
+
     [row, col] = find(teclado == c);
+
     f_L = f_bajas(row);
     f_H = f_altas(col);
-    
-    % Generar tono DTMF: x(t) = sin(2*pi*f_L*t) + sin(2*pi*f_H*t)
-    tono = sin(2*pi*f_L*t_tono) + sin(2*pi*f_H*t_tono);
-    
+
+    % DTMF = suma de dos tonos sinusoidales
+    tono = ...
+        sin(2*pi*f_L*t_tono) + ...
+        sin(2*pi*f_H*t_tono);
+
     if c == digito_objetivo
         dtmf_objetivo = tono;
         f_baja_real = f_L;
         f_alta_real = f_H;
     end
-    
-    senal_completa = [senal_completa, tono, silencio]; %#ok<AGROW>
+
+    senal_completa = ...
+        [senal_completa, tono, silencio]; %#ok<AGROW>
+
 end
 
-% Reproducir y guardar archivo .wav
-sound(dtmf_objetivo, Fs);
-audiowrite('tono_dtmf_5.wav', dtmf_objetivo, Fs);
-audiowrite('llamada_completa.wav', senal_completa, Fs);
+%% Save audio
 
-% --- Graficación: Dominio del Tiempo ---
-figure('Name', 'Señales en el Tiempo');
-subplot(2,1,1);
-plot(t_tono(1:200)*1000, dtmf_objetivo(1:200), 'b', 'LineWidth', 1.5);
-title(['Dígito Individual: "', digito_objetivo, '" (Primeros 200 Muestras)']);
-xlabel('Tiempo (ms)'); ylabel('Amplitud'); grid on;
+sound(dtmf_objetivo, Fs);
+
+audioSingle = fullfile( ...
+    outputDir, ...
+    sprintf('tono_dtmf_%s.wav', digito_objetivo));
+
+audioComplete = fullfile( ...
+    outputDir, ...
+    'secuencia_dtmf_completa.wav');
+
+audiowrite(audioSingle, dtmf_objetivo, Fs);
+audiowrite(audioComplete, senal_completa, Fs);
+
+%% ============================================================
+% 3. ANÁLISIS EN EL DOMINIO DEL TIEMPO
+% ============================================================
+
+% ------------------------------------------------------------
+% 3.1 DÍGITO INDIVIDUAL
+% ------------------------------------------------------------
+
+fig = figure('Visible', 'off');
+
+numSamplesPlot = min(200, length(dtmf_objetivo));
+
+plot( ...
+    t_tono(1:numSamplesPlot)*1000, ...
+    dtmf_objetivo(1:numSamplesPlot), ...
+    'LineWidth', 1.5);
+
+grid on;
+
+xlabel('Tiempo [ms]');
+ylabel('Amplitud');
+
+title(sprintf( ...
+    'DTMF Digit "%s" - Time Domain', ...
+    digito_objetivo));
+
+subtitle(sprintf( ...
+    'Components: %d Hz + %d Hz | Fs = %d Hz', ...
+    f_baja_real, f_alta_real, Fs));
+
+
+
+filename = fullfile( ...
+    imageDir, ...
+    sprintf( ...
+    '01_time_domain_digit_%s_%dHz_%dHz.png', ...
+    digito_objetivo, ...
+    f_baja_real, ...
+    f_alta_real));
+
+exportgraphics(fig, filename, 'Resolution', 200);
+
+close(fig);
+
+%% ------------------------------------------------------------
+% 3.2 SECUENCIA COMPLETA
+% ------------------------------------------------------------
 
 t_total = (0:length(senal_completa)-1)/Fs;
-subplot(2,1,2);
-plot(t_total, senal_completa, 'r');
-title(['Señal de Secuencia Completa: "', secuencia_marcado, '"']);
-xlabel('Tiempo (s)'); ylabel('Amplitud'); grid on;
 
-% --- Graficación: Análisis Espectral FFT ---
+fig = figure('Visible', 'off');
+
+plot(t_total, senal_completa, 'LineWidth', 1);
+
+grid on;
+
+xlabel('Tiempo [s]');
+ylabel('Amplitud');
+
+title('Complete DTMF Dialing Sequence');
+
+subtitle(sprintf( ...
+    'Sequence: "%s" | Tone = %.0f ms | Silence = %.0f ms', ...
+    secuencia_marcado, ...
+    duracion_tonos*1000, ...
+    duracion_silencio*1000));
+
+secuencia_filename = secuencia_marcado;
+
+secuencia_filename = strrep(secuencia_filename, '*', 'STAR');
+secuencia_filename = strrep(secuencia_filename, '#', 'HASH');
+
+filename = fullfile( ...
+    imageDir, ...
+    sprintf( ...
+    '02_time_domain_complete_sequence_%s.png', ...
+    secuencia_filename));
+
+exportgraphics(fig, filename, 'Resolution', 200);
+
+close(fig);
+
+%% ============================================================
+% 4. FFT DEL DÍGITO OBJETIVO
+% ============================================================
+
 N = length(dtmf_objetivo);
+
 fft_digito = abs(fft(dtmf_objetivo))/N;
+
 f = (0:N-1)*(Fs/N);
 
-% Tomar solo la primera mitad del espectro (hasta Fs/2)
 f_mitad = f(1:floor(N/2));
-espectro_mitad = 2 * fft_digito(1:floor(N/2));
 
-figure('Name', 'Análisis Espectral (FFT)');
-plot(f_mitad, espectro_mitad, 'LineWidth', 1.5);
-xlim([0 2000]); xlabel('Frecuencia (Hz)'); ylabel('Magnitud');
-title(['Espectro FFT del Dígito "', digito_objetivo, '"']); grid on;
+espectro_mitad = ...
+    2 * fft_digito(1:floor(N/2));
 
-% Detección de picos en FFT
-[picos, locs] = findpeaks(espectro_mitad, f_mitad, 'MinPeakHeight', 0.5);
-fprintf('--- RESULTADOS TEÓRICOS VS SIMULADOS (Dígito %s) ---\n', digito_objetivo);
-fprintf('Frecuencia Baja Teórica: %.1f Hz | Detectada: %.1f Hz | Error: %.2f%%\n', ...
-    f_baja_real, locs(1), abs(locs(1)-f_baja_real)/f_baja_real*100);
-fprintf('Frecuencia Alta Teórica: %.1f Hz | Detectada: %.1f Hz | Error: %.2f%%\n\n', ...
-    f_alta_real, locs(2), abs(locs(2)-f_alta_real)/f_alta_real*100);
+%% Detect peaks
 
-%% 3. ADICIÓN DE RUIDO BLANCO (AWGN)
+[picos, locs] = findpeaks( ...
+    espectro_mitad, ...
+    f_mitad, ...
+    'MinPeakHeight', 0.5);
+
+%% Find closest detected peaks to theoretical frequencies
+
+[~, idxLow] = min(abs(locs - f_baja_real));
+[~, idxHigh] = min(abs(locs - f_alta_real));
+
+f_detected_low = locs(idxLow);
+f_detected_high = locs(idxHigh);
+
+error_low = ...
+    abs(f_detected_low - f_baja_real) / f_baja_real * 100;
+
+error_high = ...
+    abs(f_detected_high - f_alta_real) / f_alta_real * 100;
+
+%% ------------------------------------------------------------
+% 4.1 FFT PLOT
+% ------------------------------------------------------------
+
+fig = figure('Visible', 'off');
+
+plot( ...
+    f_mitad, ...
+    espectro_mitad, ...
+    'LineWidth', 1.5);
+
+hold on;
+
+% Mark theoretical frequencies
+xline( ...
+    f_baja_real, ...
+    '--', ...
+    sprintf('Expected %d Hz', f_baja_real));
+
+xline( ...
+    f_alta_real, ...
+    '--', ...
+    sprintf('Expected %d Hz', f_alta_real));
+
+% Mark detected peaks
+plot( ...
+    [f_detected_low f_detected_high], ...
+    [picos(idxLow) picos(idxHigh)], ...
+    'o', ...
+    'MarkerSize', 8, ...
+    'LineWidth', 2);
+
+grid on;
+
+xlim([0 2000]);
+
+xlabel('Frequency [Hz]');
+ylabel('Magnitude');
+
+title(sprintf( ...
+    'FFT Spectrum - DTMF Digit "%s"', ...
+    digito_objetivo));
+
+subtitle(sprintf( ...
+    'Expected: %d Hz + %d Hz | Detected: %.1f Hz + %.1f Hz', ...
+    f_baja_real, ...
+    f_alta_real, ...
+    f_detected_low, ...
+    f_detected_high));
+
+filename = fullfile( ...
+    imageDir, ...
+    sprintf( ...
+    '03_fft_spectrum_digit_%s_%dHz_%dHz.png', ...
+    digito_objetivo, ...
+    f_baja_real, ...
+    f_alta_real));
+
+exportgraphics(fig, filename, 'Resolution', 200);
+
+close(fig);
+
+%% ============================================================
+% 5. AWGN ANALYSIS
+% ============================================================
+
 snr_niveles = [30, 20, 10, 0];
-figure('Name', 'Efecto de Ruido AWGN en FFT');
 
 for i = 1:length(snr_niveles)
+
     snr = snr_niveles(i);
-    senal_ruido = awgn(dtmf_objetivo, snr, 'measured');
-    
-    fft_ruido = 2*abs(fft(senal_ruido))/N;
-    
-    subplot(2,2,i);
-    plot(f_mitad, fft_ruido(1:floor(N/2)), 'k');
-    xlim([500 1800]); grid on;
-    title(['SNR = ', num2str(snr), ' dB']);
-    xlabel('Frecuencia (Hz)'); ylabel('Magnitud');
+
+    senal_ruido = ...
+        awgn(dtmf_objetivo, snr, 'measured');
+
+    fft_ruido = ...
+        2*abs(fft(senal_ruido))/N;
+
+    fig = figure('Visible', 'off');
+
+    plot( ...
+        f_mitad, ...
+        fft_ruido(1:floor(N/2)), ...
+        'LineWidth', 1.2);
+
+    grid on;
+
+    xlim([500 1800]);
+
+    xlabel('Frequency [Hz]');
+    ylabel('Magnitude');
+
+    title(sprintf( ...
+        'DTMF Spectrum with AWGN - SNR = %d dB', ...
+        snr));
+
+    subtitle(sprintf( ...
+        'Expected tones: %d Hz and %d Hz', ...
+        f_baja_real, ...
+        f_alta_real));
+
+    filename = fullfile( ...
+        imageDir, ...
+        sprintf( ...
+        '04_awgn_spectrum_SNR_%ddB.png', ...
+        snr));
+
+    exportgraphics(fig, filename, 'Resolution', 200);
+
+    close(fig);
+
 end
 
-%% 4. VARIACIÓN DE LA DURACIÓN DEL TONO Y RESOLUCIÓN ESPECTRAL
-duraciones = [0.050, 0.100, 0.250, 0.500]; % 50ms, 100ms, 250ms, 500ms
-figure('Name', 'Variación de Duración del Tono');
+%% ============================================================
+% 6. VARIACIÓN DE DURACIÓN DEL TONO
+% ============================================================
+
+duraciones = [0.050, 0.100, 0.250, 0.500];
 
 for k = 1:length(duraciones)
+
     dur = duraciones(k);
+
     t_var = 0:1/Fs:(dur - 1/Fs);
-    tono_var = sin(2*pi*f_baja_real*t_var) + sin(2*pi*f_alta_real*t_var);
-    
+
+    tono_var = ...
+        sin(2*pi*f_baja_real*t_var) + ...
+        sin(2*pi*f_alta_real*t_var);
+
     N_v = length(tono_var);
-    fft_v = 2*abs(fft(tono_var))/N_v;
-    f_v = (0:N_v-1)*(Fs/N_v);
-    
-    subplot(2,2,k);
-    plot(f_v(1:floor(N_v/2)), fft_v(1:floor(N_v/2)), 'b', 'LineWidth', 1.2);
-    xlim([500 1800]); grid on;
-    title(sprintf('Duración: %.0f ms (\\Deltaf = %.1f Hz)', dur*1000, 1/dur));
-    xlabel('Frecuencia (Hz)'); ylabel('Magnitud');
+
+    fft_v = ...
+        2*abs(fft(tono_var))/N_v;
+
+    f_v = ...
+        (0:N_v-1)*(Fs/N_v);
+
+    f_v_half = f_v(1:floor(N_v/2));
+
+    fft_v_half = fft_v(1:floor(N_v/2));
+
+    delta_f = 1/dur;
+
+    fig = figure('Visible', 'off');
+
+    plot( ...
+        f_v_half, ...
+        fft_v_half, ...
+        'LineWidth', 1.2);
+
+    grid on;
+
+    xlim([500 1800]);
+
+    xlabel('Frequency [Hz]');
+    ylabel('Magnitude');
+
+    title(sprintf( ...
+        'Effect of Tone Duration on FFT Resolution'));
+
+    subtitle(sprintf( ...
+        'Duration = %.0f ms | Theoretical \\Deltaf = %.1f Hz', ...
+        dur*1000, ...
+        delta_f));
+
+    filename = fullfile( ...
+        imageDir, ...
+        sprintf( ...
+        '05_fft_resolution_duration_%dms.png', ...
+        round(dur*1000)));
+
+    exportgraphics(fig, filename, 'Resolution', 200);
+
+    close(fig);
+
 end
 
-%% 5. DECODIFICADOR AUTOMÁTICO DE DÍGITOS DTMF
-fprintf('--- DECODIFICACIÓN AUTOMÁTICA DE LA SECUENCIA ---\n');
+%% ============================================================
+% 7. AUTOMATIC DTMF DECODER
+% ============================================================
+
+fprintf('\n');
+fprintf('============================================\n');
+fprintf('AUTOMATIC DTMF DECODING\n');
+fprintf('============================================\n');
+
 muestras_tono = length(t_tono);
 muestras_silencio = length(t_silencio);
-paso = muestras_tono + muestras_silencio;
+
+paso = ...
+    muestras_tono + muestras_silencio;
+
 num_digitos = length(secuencia_marcado);
 
+decodingResults = struct([]);
+
 for idx = 1:num_digitos
-    inicio = (idx - 1) * paso + 1;
-    fin = inicio + muestras_tono - 1;
-    segmento = senal_completa(inicio:fin);
-    
-    % FFT del segmento
+
+    inicio = ...
+        (idx - 1) * paso + 1;
+
+    fin = ...
+        inicio + muestras_tono - 1;
+
+    segmento = ...
+        senal_completa(inicio:fin);
+
+    % FFT
     N_seg = length(segmento);
-    fft_seg = 2*abs(fft(segmento))/N_seg;
-    f_seg = (0:N_seg-1)*(Fs/N_seg);
-    
-    % Filtrado del rango de búsqueda DTMF (600 Hz - 1600 Hz)
-    idx_rango = find(f_seg >= 600 & f_seg <= 1700);
+
+    fft_seg = ...
+        2*abs(fft(segmento))/N_seg;
+
+    f_seg = ...
+        (0:N_seg-1)*(Fs/N_seg);
+
+    % DTMF search range
+    idx_rango = ...
+        find(f_seg >= 600 & f_seg <= 1700);
+
     f_sub = f_seg(idx_rango);
+
     fft_sub = fft_seg(idx_rango);
-    
-    % Identificar picos principales
-    [~, locs_p] = findpeaks(fft_sub, f_sub, 'MinPeakHeight', 0.4, 'SortStr', 'descend');
-    picos_det = sort(locs_p(1:2));
-    
-    f_L_det = picos_det(1);
-    f_H_det = picos_det(2);
-    
-    % Identificar posición en la matriz DTMF por aproximación
-    [~, r_idx] = min(abs(f_bajas - f_L_det));
-    [~, c_idx] = min(abs(f_altas - f_H_det));
-    digito_estimado = teclado(r_idx, c_idx);
-    
-    fprintf('Dígito %d: Teórico="%c" | Det=[%.1f Hz, %.1f Hz] | Estimado="%c"\n', ...
-        idx, secuencia_marcado(idx), f_L_det, f_H_det, digito_estimado);
+
+    % Detect peaks
+    [~, locs_p] = findpeaks( ...
+        fft_sub, ...
+        f_sub, ...
+        'MinPeakHeight', 0.4, ...
+        'SortStr', 'descend');
+
+    if length(locs_p) >= 2
+
+        picos_det = sort(locs_p(1:2));
+
+        f_L_det = picos_det(1);
+        f_H_det = picos_det(2);
+
+        [~, r_idx] = ...
+            min(abs(f_bajas - f_L_det));
+
+        [~, c_idx] = ...
+            min(abs(f_altas - f_H_det));
+
+        digito_estimado = ...
+            teclado(r_idx, c_idx);
+
+    else
+
+        f_L_det = NaN;
+        f_H_det = NaN;
+        digito_estimado = '?';
+
+    end
+
+    %% Store result
+
+    decodingResults(idx).position = idx;
+    decodingResults(idx).expected_digit = ...
+        secuencia_marcado(idx);
+    decodingResults(idx).detected_digit = ...
+        digito_estimado;
+    decodingResults(idx).detected_low_frequency_hz = ...
+        f_L_det;
+    decodingResults(idx).detected_high_frequency_hz = ...
+        f_H_det;
+
+    decodingResults(idx).correct = ...
+        digito_estimado == secuencia_marcado(idx);
+
+    fprintf( ...
+        'Digit %d: Expected="%c" | Detected=[%.1f Hz, %.1f Hz] | Estimated="%c"\n', ...
+        idx, ...
+        secuencia_marcado(idx), ...
+        f_L_det, ...
+        f_H_det, ...
+        digito_estimado);
+
 end
 
-%% 6. SIMULACIÓN DE ATENUACIÓN DE LÍNEA (-6 dB, -12 dB, -20 dB)
+%% ============================================================
+% 8. LINE ATTENUATION
+% ============================================================
+
 atenuaciones_dB = [0, -6, -12, -20];
-figure('Name', 'Efecto de Atenuación de Línea');
 
 for a = 1:length(atenuaciones_dB)
+
     db = atenuaciones_dB(a);
-    factor = 10^(db/20); % Conversión de dB a ganancia lineal
-    dtmf_atenuado = dtmf_objetivo * factor;
-    
-    subplot(2,2,a);
-    plot(t_tono*1000, dtmf_atenuado, 'r');
-    ylim([-2.5 2.5]); grid on;
-    title(['Atenuación: ', num2str(db), ' dB (Factor: ', num2str(factor, '%.3f'), ')']);
-    xlabel('Tiempo (ms)'); ylabel('Amplitud');
+
+    factor = 10^(db/20);
+
+    dtmf_atenuado = ...
+        dtmf_objetivo * factor;
+
+    fig = figure('Visible', 'off');
+
+    plot( ...
+        t_tono*1000, ...
+        dtmf_atenuado, ...
+        'LineWidth', 1);
+
+    ylim([-2.5 2.5]);
+
+    grid on;
+
+    xlabel('Time [ms]');
+    ylabel('Amplitude');
+
+    title(sprintf( ...
+        'DTMF Signal with Line Attenuation'));
+
+    subtitle(sprintf( ...
+        'Attenuation = %d dB | Linear factor = %.3f', ...
+        db, ...
+        factor));
+
+    filename = fullfile( ...
+        imageDir, ...
+        sprintf( ...
+        '06_line_attenuation_%ddB.png', ...
+        db));
+
+    exportgraphics(fig, filename, 'Resolution', 200);
+
+    close(fig);
+
 end
+
+%% ============================================================
+% 9. CREATE METADATA FOR LLM / REPORT GENERATION
+% ============================================================
+
+metadata = struct();
+
+%% General information
+
+metadata.experiment = struct( ...
+    'name', 'DTMF Signal Simulation and Analysis', ...
+    'description', ...
+        'Simulation of DTMF tone generation, spectral analysis, noise effects, spectral resolution, automatic decoding, and line attenuation.', ...
+    'sequence', secuencia_marcado, ...
+    'target_digit', digito_objetivo);
+
+%% Sampling parameters
+
+metadata.sampling = struct( ...
+    'sampling_frequency_hz', Fs, ...
+    'sampling_period_seconds', 1/Fs, ...
+    'tone_duration_seconds', duracion_tonos, ...
+    'silence_duration_seconds', duracion_silencio, ...
+    'nyquist_frequency_hz', Fs/2);
+
+%% DTMF mapping
+
+metadata.dtmf = struct( ...
+    'low_group_frequencies_hz', f_bajas, ...
+    'high_group_frequencies_hz', f_altas, ...
+    'target_digit', digito_objetivo, ...
+    'target_low_frequency_hz', f_baja_real, ...
+    'target_high_frequency_hz', f_alta_real);
+
+%% FFT results
+
+metadata.fft_analysis = struct( ...
+    'fft_length', N, ...
+    'frequency_resolution_hz', Fs/N, ...
+    'expected_low_frequency_hz', f_baja_real, ...
+    'expected_high_frequency_hz', f_alta_real, ...
+    'detected_low_frequency_hz', f_detected_low, ...
+    'detected_high_frequency_hz', f_detected_high, ...
+    'low_frequency_error_percent', error_low, ...
+    'high_frequency_error_percent', error_high);
+
+%% AWGN information
+
+metadata.noise_analysis = struct( ...
+    'snr_levels_db', snr_niveles, ...
+    'description', ...
+        'White Gaussian noise is added to the target DTMF tone to evaluate spectral robustness.');
+
+%% Duration analysis
+
+metadata.duration_analysis = struct( ...
+    'tested_durations_seconds', duraciones, ...
+    'theoretical_frequency_resolution_hz', 1./duraciones, ...
+    'description', ...
+        'Shorter signals provide poorer frequency resolution, while longer observation times improve separation of the DTMF frequency components.');
+
+%% Decoder results
+
+metadata.decoder = struct( ...
+    'expected_sequence', secuencia_marcado, ...
+    'results', decodingResults);
+
+%% Attenuation
+
+metadata.attenuation = struct( ...
+    'attenuation_levels_db', atenuaciones_dB, ...
+    'description', ...
+        'Amplitude attenuation is applied to the target DTMF signal to simulate transmission losses.');
+
+%% Expected observations
+
+metadata.expected_observations = { ...
+    sprintf( ...
+        'The DTMF digit "%s" should contain two dominant frequency components at %d Hz and %d Hz.', ...
+        digito_objetivo, ...
+        f_baja_real, ...
+        f_alta_real), ...
+
+    'The time-domain signal is the sum of two sinusoidal signals.', ...
+
+    'The FFT should show two dominant spectral peaks corresponding to the low and high DTMF groups.', ...
+
+    'Increasing SNR should make the two DTMF spectral peaks easier to distinguish.', ...
+
+    'Decreasing tone duration reduces FFT frequency resolution.', ...
+
+    'Line attenuation reduces signal amplitude but should not change the theoretical DTMF frequencies.', ...
+
+    sprintf( ...
+        'The decoder should identify the sequence "%s" from the generated signal.', ...
+        secuencia_marcado) ...
+};
+
+%% Image descriptions
+
+metadata.images = { ...
+
+    struct( ...
+        'file', '01_time_domain_digit.png', ...
+        'type', 'time_domain', ...
+        'description', ...
+            'First 200 samples of the target DTMF digit in the time domain.', ...
+        'expected_features', ...
+            'Superposition of two sinusoidal components.'), ...
+
+    struct( ...
+        'file', '02_time_domain_complete_sequence.png', ...
+        'type', 'time_domain_sequence', ...
+        'description', ...
+            'Complete simulated DTMF dialing sequence including tones and silence intervals.', ...
+        'expected_features', ...
+            'Five DTMF tones separated by silence intervals.'), ...
+
+    struct( ...
+        'file', '03_fft_spectrum_digit.png', ...
+        'type', 'frequency_domain', ...
+        'description', ...
+            'FFT spectrum of the target DTMF digit with expected and detected frequencies marked.', ...
+        'expected_features', ...
+            'Two dominant peaks near the theoretical low and high DTMF frequencies.'), ...
+
+    struct( ...
+        'file', '04_awgn_spectrum_SNR.png', ...
+        'type', 'noise_analysis', ...
+        'description', ...
+            'Frequency spectrum of the DTMF signal after addition of white Gaussian noise.', ...
+        'expected_features', ...
+            'Noise floor increases as SNR decreases.'), ...
+
+    struct( ...
+        'file', '05_fft_resolution_duration.png', ...
+        'type', 'frequency_resolution', ...
+        'description', ...
+            'FFT spectrum for different DTMF tone durations.', ...
+        'expected_features', ...
+            'Longer signals produce narrower spectral peaks.'), ...
+
+    struct( ...
+        'file', '06_line_attenuation.png', ...
+        'type', 'attenuation_analysis', ...
+        'description', ...
+            'Time-domain DTMF signal after different transmission attenuation levels.', ...
+        'expected_features', ...
+            'Signal amplitude decreases as attenuation becomes more negative.') ...
+};
+
+%% ============================================================
+% 10. SAVE JSON METADATA
+% ============================================================
+
+jsonFile = fullfile( ...
+    outputDir, ...
+    'simulation_metadata.json');
+
+jsonText = jsonencode( ...
+    metadata, ...
+    'PrettyPrint', true);
+
+fid = fopen(jsonFile, 'w');
+
+if fid == -1
+    error('Could not create metadata file.');
+end
+
+fprintf(fid, '%s', jsonText);
+
+fclose(fid);
+
+%% ============================================================
+% 11. FINAL SUMMARY
+% ============================================================
+
+fprintf('\n');
+fprintf('============================================\n');
+fprintf('SIMULATION COMPLETED\n');
+fprintf('============================================\n');
+
+fprintf('Results directory:\n%s\n\n', outputDir);
+
+fprintf('Target digit: %s\n', digito_objetivo);
+fprintf('Expected frequencies: %.0f Hz + %.0f Hz\n', ...
+    f_baja_real, f_alta_real);
+
+fprintf('Detected frequencies: %.1f Hz + %.1f Hz\n', ...
+    f_detected_low, f_detected_high);
+
+fprintf('Frequency errors: %.3f%% / %.3f%%\n', ...
+    error_low, error_high);
+
+fprintf('\nGenerated images:\n');
+fprintf('  %s\n', imageDir);
+
+fprintf('\nMetadata:\n');
+fprintf('  %s\n', jsonFile);
+
+fprintf('\nAudio files:\n');
+fprintf('  %s\n', audioSingle);
+fprintf('  %s\n', audioComplete);

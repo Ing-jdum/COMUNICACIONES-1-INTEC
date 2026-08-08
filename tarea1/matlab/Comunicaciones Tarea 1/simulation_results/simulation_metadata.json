@@ -1,0 +1,58 @@
+{
+  "simulation": {
+    "model": "mi_modelo_dtmf",
+    "description": "DTMF dual-tone signal generation and sampling simulation",
+    "duration_seconds": 0.25,
+    "sample_rate_hz": 8000,
+    "sample_period_seconds": 0.000125
+  },
+  "input_signals": {
+    "low_frequency_hz": 770,
+    "high_frequency_hz": 1336,
+    "signal_type": "Two sinusoidal signals summed together",
+    "low_signal_amplitude": 1,
+    "high_signal_amplitude": 1
+  },
+  "frequency_analysis": {
+    "expected_low_frequency_hz": 770,
+    "expected_high_frequency_hz": 1336,
+    "detected_low_frequency_hz": 771.6141929035482,
+    "detected_high_frequency_hz": 1335.3323338330836,
+    "low_frequency_error_percent": 0.20963544201924683,
+    "high_frequency_error_percent": 0.049975012493745,
+    "fft_frequency_resolution_hz": 3.99800099950025,
+    "nyquist_frequency_hz": 4000
+  },
+  "expected_behavior": [
+    "The time-domain signal should contain two sinusoidal components at 770 Hz and 1336 Hz.",
+    "The FFT should contain dominant peaks near 770 Hz and 1336 Hz.",
+    "No significant frequency components should exist outside the two dominant DTMF tones.",
+    "The sampling frequency of 8000 Hz provides a Nyquist frequency of 4000 Hz.",
+    "The Zero-Order Hold represents the sampling/channel stage."
+  ],
+  "graphs": {
+    "time_domain_zoom": "C:\\Users\\johnd\\Documents\\intec\\comunicaciones\\tareas\\tarea1\\matlab\\Comunicaciones Tarea 1\\simulation_results\\dtmf_time_domain_770Hz_1336Hz.png",
+    "complete_time_domain": "C:\\Users\\johnd\\Documents\\intec\\comunicaciones\\tareas\\tarea1\\matlab\\Comunicaciones Tarea 1\\simulation_results\\dtmf_complete_signal_770Hz_1336Hz.png",
+    "frequency_spectrum": "C:\\Users\\johnd\\Documents\\intec\\comunicaciones\\tareas\\tarea1\\matlab\\Comunicaciones Tarea 1\\simulation_results\\dtmf_frequency_spectrum_770Hz_1336Hz.png",
+    "frequency_components_zoom": "C:\\Users\\johnd\\Documents\\intec\\comunicaciones\\tareas\\tarea1\\matlab\\Comunicaciones Tarea 1\\simulation_results\\dtmf_frequency_components_770Hz_1336Hz.png"
+  },
+  "graph_descriptions": [
+    "dtmf_time_domain_770Hz_1336Hz.png: Zoomed time-domain view of the first 30 ms of the DTMF signal. The waveform is the sum of two sinusoidal signals at 770 Hz and 1336 Hz.",
+    "dtmf_complete_signal_770Hz_1336Hz.png: Complete time-domain simulation lasting 0.250 seconds. Shows the entire sampled DTMF waveform.",
+    "dtmf_frequency_spectrum_770Hz_1336Hz.png: FFT spectrum from 0 to 2000 Hz. The two dominant components should occur at approximately 770 Hz and 1336 Hz.",
+    "dtmf_frequency_components_770Hz_1336Hz.png: Zoomed FFT spectrum from 500 to 1600 Hz, focusing on the expected DTMF frequency components at 770 Hz and 1336 Hz."
+  ],
+  "analysis_notes": [
+    "Expected low-frequency component: 770 Hz.",
+    "Expected high-frequency component: 1336 Hz.",
+    "Detected low-frequency component: 771.61 Hz.",
+    "Detected high-frequency component: 1335.33 Hz.",
+    "Low-frequency detection error: 0.2096%.",
+    "High-frequency detection error: 0.0500%.",
+    "Sampling frequency: 8000 Hz.",
+    "Nyquist frequency: 4000 Hz.",
+    "FFT frequency resolution: 3.9980 Hz.",
+    "The spectrum should show two dominant peaks corresponding to the DTMF tones.",
+    "Additional significant peaks may indicate distortion, spectral leakage, numerical artifacts, or unintended signal components."
+  ]
+}
