@@ -1,0 +1,10 @@
+Archivo: 02_senal_amortiguada.pdf
+Titulo: Senal senoidal amortiguada X(t) = e^{-0.1t} sen(0.6666t)
+
+Descripcion:
+Senal exponencial amortiguada: una senoidal de frecuencia angular 0.6666 rad/s multiplicada por una envolvente exponencial decreciente e^{-0.1t}. Representa el comportamiento tipico de un sistema de segundo orden subamortiguado (por ejemplo, la respuesta transitoria de un circuito RLC o de un sistema mecanico-electrico amortiguado). Vector de simulacion t=0:0.1:30 s; eje de tiempo dibujado hasta 35 s y eje de amplitud fijado a [-1, 1] segun el enunciado.
+
+Parametros / notas:
+Expresion MATLAB: X = exp(-0.1*t).*sin(0.6666*t), t = 0:0.1:30. xlim([0 35]), ylim([-1 1]) fijados explicitamente. La envolvente decae a aproximadamente e^{-3}=0.0498 en t=30 s, por lo que la amplitud es casi nula hacia el final del rango graficado.
+
+Generado automaticamente por script MATLAB - Tarea 2 Comunicaciones (INTEC).

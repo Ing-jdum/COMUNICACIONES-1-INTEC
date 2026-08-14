@@ -1,0 +1,10 @@
+Archivo: 04b_simulink_fft.pdf
+Titulo: Espectro de magnitud (FFT) de la senal compuesta simulada en Simulink
+
+Descripcion:
+Espectro de magnitud (FFT, un solo lado, en Hz) de la senal registrada desde Simulink via To Workspace. Sirve como respaldo del bloque Spectrum Analyzer, ya que este no puede capturarse como imagen en ejecucion headless. Deberia mostrar picos en 60,120,180,240,300,360 Hz con magnitudes decrecientes 120,60,40,30,24,20 V; los triangulos negros marcan la ubicacion/amplitud esperada de cada armonico.
+
+Parametros / notas:
+Fs = 10000 Hz, N = 1001 muestras, resolucion en frecuencia = Fs/N = 9.990 Hz. Ver results\04_simulink_fft_valores.txt para los valores numericos reales (picos detectados) obtenidos de esta FFT.
+
+Generado automaticamente por script MATLAB - Tarea 2 Comunicaciones (INTEC).

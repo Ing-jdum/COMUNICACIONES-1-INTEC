@@ -1,0 +1,10 @@
+Archivo: 01_item02_Sa.pdf
+Titulo: Item 2: x2(t) = Sa(2*X*t), X=2.4 (funcion de muestreo)
+
+Descripcion:
+Funcion de muestreo (Sa, sinc no normalizada) Sa(2*X*t) con X=2.4, evaluada en t = 0:0.001:2 s. Paneles: senal continua, stem, magnitud FFT y zoom del espectro en bajas frecuencias.
+
+Parametros / notas:
+Expresion MATLAB: x2 = sinc(2*X2*t/pi), X2=2.4. Nota: sinc de MATLAB esta normalizada (sinc(u)=sin(pi u)/(pi u)); se divide el argumento entre pi para recuperar la funcion de muestreo clasica Sa(u) = sin(u)/u.
+
+Generado automaticamente por script MATLAB - Tarea 2 Comunicaciones (INTEC).

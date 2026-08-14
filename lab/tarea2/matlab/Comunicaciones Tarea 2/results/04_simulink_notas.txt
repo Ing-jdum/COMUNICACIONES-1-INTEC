@@ -1,0 +1,24 @@
+NOTAS - Ejercicio 4: modelo Simulink de armonicos de 60 Hz
+Tarea 2 - Comunicaciones (INTEC)
+===========================================================
+
+Resumen del modelo:
+- 6 bloques Sine Wave con amplitudes [120,60,40,30,24,20] V y frecuencias [60,120,180,240,300,360] Hz, sumados con un bloque Add de 6 entradas.
+- Salida llevada a un bloque Scope (dominio del tiempo) y, si DSP System Toolbox esta disponible, a un bloque Spectrum Analyzer (dominio de la frecuencia); ademas se registra con To Workspace para poder graficar tiempo y FFT desde MATLAB, ya que los scopes no pueden capturarse como imagen en ejecucion -batch.
+- Solver de paso fijo, Ts = 1/10000 s (Fs = 10000 Hz), StopTime = 0.100 s.
+
+Pregunta del enunciado: ¿Por que el espectro esta mal? ¿Que parametro debe corregirse?
+
+ESTADO REAL OBSERVADO EN ESTA CORRIDA (ver results\04_simulink_fft_valores.txt para el detalle numerico): en esta ejecucion concreta el espectro NO esta mal. Los 6 picos detectados automaticamente (findpeaks) caen dentro de ~0.06 Hz de las frecuencias de diseno (60,120,180,240,300,360 Hz) y las amplitudes detectadas coinciden con las de diseno (120,60,40,30,24,20 V) con un error menor al 2%. La pequena desviacion en frecuencia (p.ej. 59.94 Hz en vez de 60.00 Hz) es solo el efecto esperable de la resolucion finita de la FFT (Delta_f = Fs/N = 9.99 Hz, con el pico real cayendo entre dos bins), no un sintoma de aliasing ni de leakage severo: con Fs=10000 Hz (>>2*360 Hz de Nyquist) y N=1001 muestras sobre 0.1 s (6 periodos exactos de la fundamental de 60 Hz), este montaje particular evita ambos problemas. Por lo tanto, la pregunta "¿por que el espectro esta mal?" del enunciado se responde aqui como un caso de ANALISIS CONCEPTUAL/GENERICO (que parametros PODRIAN arruinar el espectro y como se corrigen), util para el informe y para configuraciones distintas a la usada en este script, pero no describe un defecto realmente presente en esta corrida.
+
+Respuesta conceptual (teoria DSP aplicable en general a este tipo de montaje, para cuando SI se elijan parametros que produzcan un espectro incorrecto):
+
+1) Frecuencia de muestreo insuficiente (aliasing): si Ts del bloque Sine Wave o del solver no cumple el criterio de Nyquist (Fs >= 2*f_max, idealmente con buen margen, p.ej. Fs >= 10*f_max), el armonico mas alto (360 Hz en este caso) puede aparecer replicado/reflejado en una frecuencia menor a la real, deformando el espectro. Correccion: aumentar Fs (reducir Ts) del solver/bloques Sine Wave hasta satisfacer Nyquist con margen.
+
+2) Fuga espectral (spectral leakage) por ventana no entera en periodos: si la ventana de datos analizada (StopTime o el numero de muestras usado en la FFT) no contiene un numero entero de periodos de la fundamental (60 Hz => periodo 16.667 ms), la FFT/DFT asume periodicidad artificial en los bordes y "esparce" la energia de cada armonico hacia frecuencias vecinas (leakage), ensanchando los picos y reduciendo su amplitud aparente. Correccion: ajustar StopTime (o la longitud de la ventana FFT) a un multiplo entero del periodo fundamental (p.ej. usar exactamente N/60 segundos), o aplicar una ventana de suavizado (Hann, Hamming) antes de la FFT.
+
+3) Resolucion en frecuencia insuficiente: la resolucion del espectro es Delta_f = Fs/N; si N (numero de muestras) es pequeno, Delta_f puede ser mayor que la separacion entre armonicos (60 Hz), causando que picos cercanos se mezclen o que la ubicacion de cada pico no coincida exactamente con 60,120,...,360 Hz. Correccion: aumentar el numero de muestras N (StopTime mas largo o Ts mas pequeno) para reducir Delta_f por debajo de la separacion entre armonicos.
+
+4) Configuracion del bloque Spectrum Analyzer / FFT: parametros por defecto del bloque (tamano de FFT, tipo de ventana, promediado, unidades dB vs. lineal) pueden no coincidir con lo esperado, dando la impresion de un espectro "incorrecto" cuando en realidad solo esta escalado o ventaneado distinto. Correccion: revisar y ajustar en el bloque los parametros de tamano de FFT, tipo de ventana y unidades para que coincidan con el analisis deseado.
+
+En sintesis, el parametro mas probable a corregir es el tiempo de muestreo (Ts / frecuencia de muestreo Fs) para garantizar Nyquist con margen, y/o la duracion de la ventana de analisis (StopTime / N) para que contenga un numero entero de periodos de la fundamental y ofrezca resolucion en frecuencia suficiente para separar los 6 armonicos de 60 Hz entre si.

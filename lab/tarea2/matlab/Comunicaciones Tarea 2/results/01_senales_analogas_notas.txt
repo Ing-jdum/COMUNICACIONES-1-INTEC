@@ -1,0 +1,21 @@
+NOTAS Y SUPUESTOS - Ejercicio 1: Graficas senales analogas
+Tarea 2 - Comunicaciones (INTEC)
+===========================================================
+
+Vector de tiempo base: t = 0:0.001:2 (excepto item 10, discreto en n, y item 11, que usa t=0:0.001:15 por duracion explicita de 15 s).
+
+Item 1: x1(t) = 1 - sin(2*X*t), X=2 -> MATLAB: x1 = 1 - sin(2*X1*t). Supuesto: "1-sen(2xt)" se interpreto como "1 menos sen(2*x*t)" (resta de un valor constante 1 y la funcion seno), con X multiplicando el argumento (2*X*t).
+
+Item 2: x2(t) = Sa(2*X*t), X=2.4 -> MATLAB: x2 = sinc(2*X2*t/pi). Supuesto: se uso sinc() normalizada de MATLAB (sinc(u)=sin(pi u)/(pi u)) y se ajusto el argumento dividiendo entre pi para obtener Sa(u)=sin(u)/u.
+
+Item 7: -5*sen(5t)*e^{3.5t}, X=2j (enunciado) -> se grafico la formula literal sin aplicar X, pues la formula ya es real-valuada y no hay una posicion natural para insertar una escala compleja sin contradecir la expresion dada. Ambiguedad documentada.
+
+Item 9: x9(t) = sin(2t)/(2t) -> MATLAB: x9 = sin(2*t)./(2*t) con x9(0)=1 por limite de L'Hopital (evita 0/0). No se aplico ninguna constante X adicional pues el enunciado no especifica una para este item.
+
+Item 10: secuencia discreta x[n] (n=1->1, n=0->2, resto 0). Se trata como secuencia de tiempo discreto pura (no continua): se omiten los paneles de plot continuo y se muestran solo stem + FFT con zero-padding (64 puntos).
+
+Item 11: se uso sawtooth(2*pi*f*t) con f=1 Hz (no especificada en el enunciado, solo la duracion de 15 s); se documenta la frecuencia elegida como supuesto.
+
+Item 12: A no esta especificada en el enunciado; se asumio A=1 como amplitud de referencia. f=100 Hz y omega=2*pi*f segun se indica.
+
+Items sin ambiguedad relevante (3, 4, 5, 6, 8, 10, 11) se implementaron de forma directa siguiendo la formula y la constante X dadas en el enunciado.

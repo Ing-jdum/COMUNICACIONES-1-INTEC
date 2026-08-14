@@ -1,0 +1,10 @@
+Archivo: 03c_senal_suma.pdf
+Titulo: Senal resultante ysum = suma de fundamental + 5 armonicos
+
+Descripcion:
+Forma de onda resultante de sumar la fundamental de 60 Hz (120 V) con sus armonicos 2do a 6to. La forma ya no es una senoidal pura: presenta distorsion armonica tipica de cargas no lineales en sistemas electricos (ej. variadores de frecuencia, fuentes conmutadas, balastros electronicos). Ventana: t=0:0.001:0.1 s.
+
+Parametros / notas:
+Expresion MATLAB: ysum = y1+y2+y3+y4+y5+y6.
+
+Generado automaticamente por script MATLAB - Tarea 2 Comunicaciones (INTEC).

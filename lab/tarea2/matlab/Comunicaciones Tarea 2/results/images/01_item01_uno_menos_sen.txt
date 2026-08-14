@@ -1,0 +1,10 @@
+Archivo: 01_item01_uno_menos_sen.pdf
+Titulo: Item 1: x1(t) = 1 - sen(2*X*t), X=2
+
+Descripcion:
+Senal x1(t) = 1 - sin(2*2*t) evaluada en t = 0:0.001:2 s. Se muestran 4 paneles: senal continua, version discretizada (stem), magnitud del espectro (FFT) y fase del espectro.
+
+Parametros / notas:
+Expresion MATLAB: x1 = 1 - sin(2*X1*t), con X1 = 2. Interpretacion: el "1-" del enunciado es el termino constante (1 menos la funcion seno), y X multiplica el argumento del seno (2*X*t), no la amplitud.
+
+Generado automaticamente por script MATLAB - Tarea 2 Comunicaciones (INTEC).

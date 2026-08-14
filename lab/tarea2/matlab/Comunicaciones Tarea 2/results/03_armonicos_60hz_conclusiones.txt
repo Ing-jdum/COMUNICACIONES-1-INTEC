@@ -1,0 +1,9 @@
+CONCLUSIONES - Ejercicio 3: armonicos en una senal electrica de 60 Hz
+Tarea 2 - Comunicaciones (INTEC)
+===========================================================
+
+1. La presencia de armonicos (multiplos enteros de la frecuencia fundamental de 60 Hz) distorsiona la forma de onda senoidal pura de la red electrica; la senal resultante (ysum) deja de ser una senoidal limpia y adquiere una forma con picos y valles adicionales, tipica de cargas no lineales (variadores de frecuencia, fuentes conmutadas, balastros electronicos, rectificadores).
+
+2. Esta distorsion se cuantifica con la Distorsion Armonica Total (THD, Total Harmonic Distortion), definida como la razon entre el valor RMS de todos los armonicos (excluyendo la fundamental) y el valor RMS de la fundamental. En este caso, con amplitudes 120,60,40,30,24,20 V, el THD es considerable dado que el 2do armonico por si solo ya representa el 50% de la fundamental, lo que en un sistema real indicaria un nivel de distorsion fuera de los limites recomendados por normas como IEEE 519.
+
+3. Un alto contenido armonico en equipos electricos provoca sobrecalentamiento de conductores y transformadores (perdidas adicionales por efecto skin y corrientes de Foucault), interferencia electromagnetica en equipos de comunicaciones cercanos, y errores en instrumentos de medicion que asumen una onda puramente senoidal; por ello en instalaciones electricas reales se emplean filtros de armonicos y se limita el THD mediante normativa.

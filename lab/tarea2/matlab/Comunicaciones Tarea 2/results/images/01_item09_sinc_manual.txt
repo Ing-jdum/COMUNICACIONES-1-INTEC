@@ -1,0 +1,10 @@
+Archivo: 01_item09_sinc_manual.pdf
+Titulo: Item 9: x9(t) = sin(2t)/(2t)
+
+Descripcion:
+Funcion tipo sinc sen(2t)/(2t), con el valor en t=0 fijado en 1 mediante el limite de L'Hopital (evita division 0/0). Evaluada en t=0:0.001:2 s.
+
+Parametros / notas:
+Expresion MATLAB: x9 = sin(2*t)./(2*t), con correccion explicita x9(t=0)=1. Nota: no se uso sinc() de MATLAB directamente para dejar explicito el manejo del limite pedido en el enunciado ("Sen(2xt)/2xt").
+
+Generado automaticamente por script MATLAB - Tarea 2 Comunicaciones (INTEC).

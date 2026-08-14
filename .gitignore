@@ -83,3 +83,4 @@ _minted*/
 ## Project-specific
 ejemplos/      # ignores any folder named "ejemplos" at any depth
 prompt.md
+*.md

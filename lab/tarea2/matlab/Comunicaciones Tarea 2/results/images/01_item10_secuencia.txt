@@ -1,0 +1,10 @@
+Archivo: 01_item10_secuencia.pdf
+Titulo: Item 10: secuencia discreta x[n] = {2 en n=0, 1 en n=1, 0 resto}
+
+Descripcion:
+Secuencia discreta definida por partes (no es una senal de tiempo continuo), graficada con stem sobre n=-3:3, y su FFT con zero-padding a 64 puntos para visualizar el espectro con mejor resolucion.
+
+Parametros / notas:
+Expresion MATLAB: x10(n=0)=2, x10(n=1)=1, resto 0. FFT calculada con fft(x10,64).
+
+Generado automaticamente por script MATLAB - Tarea 2 Comunicaciones (INTEC).

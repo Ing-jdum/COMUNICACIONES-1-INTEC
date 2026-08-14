@@ -1,0 +1,11 @@
+Archivo: 04c_simulink_diagrama.pdf
+Titulo: Diagrama de bloques del modelo Simulink modelo_armonicos_60hz
+
+Descripcion:
+Diagrama de bloques del modelo Simulink que genera la senal electrica de 60 Hz con armonicos hasta el 6to. Estructura: 6 bloques Sine Wave (uno por cada armonico, amplitudes [120,60,40,30,24,20] V y frecuencias [60,120,180,240,300,360] Hz) -> bloque Add/Suma_armonicos (6 entradas, suma todas las senoidales) -> bifurcacion hacia: (a) bloque Scope_tiempo (visualizacion en el dominio del tiempo), (b) bloque Spectrum_Analyzer si DSP System Toolbox esta disponible (visualizacion en el dominio de la frecuencia), y (c) bloque Salida_workspace (To Workspace, variable ysum_simulink) usado como respaldo para calcular la FFT en MATLAB despues de simular, ya que los scopes no se pueden capturar como imagen en ejecucion headless (-batch).
+
+Parametros / notas:
+Solver: paso fijo, Ts = 0.0001000000 s (Fs = 10000 Hz). StopTime = 0.100 s.
+Spectrum Analyzer incluido: 1 (1=si, 0=no; requiere DSP System Toolbox).
+
+Generado automaticamente por script MATLAB - Tarea 2 Comunicaciones (INTEC).

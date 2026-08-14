@@ -1,0 +1,10 @@
+Archivo: 01_item12_movimientoarmonicos1.pdf
+Titulo: Item 12: movimientoarmonicos1 - Y1, Y2 y Z=Y1+Y2
+
+Descripcion:
+Dos senoidales de distinta frecuencia y amplitud: Y1=A*sen(5*omega*t) y Y2=1.2*A*sen(4*omega*t), con omega=2*pi*f, f=100 Hz, A=1, graficadas cada una en su propio panel junto con la senal resultante Z=Y1+Y2, sobre t=0:0.001:1.5 s. Corresponde al "movimientoarmonicos1" del enunciado.
+
+Parametros / notas:
+Expresion MATLAB: Y1=A*sin(5*omega*t), Y2=1.2*A*sin(4*omega*t), Z=Y1+Y2, omega=2*pi*f, f=100, A=1 (supuesto, no especificado en el enunciado).
+
+Generado automaticamente por script MATLAB - Tarea 2 Comunicaciones (INTEC).

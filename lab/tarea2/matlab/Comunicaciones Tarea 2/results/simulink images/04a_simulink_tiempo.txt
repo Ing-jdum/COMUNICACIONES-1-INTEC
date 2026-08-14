@@ -1,0 +1,10 @@
+Archivo: 04a_simulink_tiempo.pdf
+Titulo: Forma de onda en el tiempo de la senal compuesta simulada en Simulink
+
+Descripcion:
+Waveform en el dominio del tiempo de la senal compuesta (fundamental 60 Hz, 120 V, mas armonicos 2do a 6to) obtenida al simular el modelo modelo_armonicos_60hz y registrar la salida del bloque Suma_armonicos mediante To Workspace. Equivale a lo que mostraria el bloque Scope del modelo, capturado aqui via MATLAB porque los scopes no pueden exportarse como imagen en ejecucion headless (-batch).
+
+Parametros / notas:
+Fs simulacion = 10000 Hz (Ts=1/10000 s), StopTime = 0.100 s. Amplitudes = [120,60,40,30,24,20] V, Frecuencias = [60,120,180,240,300,360] Hz.
+
+Generado automaticamente por script MATLAB - Tarea 2 Comunicaciones (INTEC).

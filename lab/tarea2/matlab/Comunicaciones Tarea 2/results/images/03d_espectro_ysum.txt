@@ -1,0 +1,10 @@
+Archivo: 03d_espectro_ysum.pdf
+Titulo: Espectro de magnitud (FFT, un solo lado) de la senal resultante ysum
+
+Descripcion:
+Espectro de magnitud de un solo lado (en Hz) de la senal resultante ysum, calculado con fft() sobre la ventana t=0:0.001:0.1 s (Fs=1000 Hz). Debe mostrar picos en 60, 120, 180, 240, 300 y 360 Hz con magnitudes decrecientes 120, 60, 40, 30, 24 y 20 V respectivamente, confirmando la composicion armonica de la senal. Los triangulos rojos marcan la ubicacion y amplitud esperadas de cada armonico segun las formulas originales.
+
+Parametros / notas:
+Fs = 1000 Hz, Nfft = 101 muestras (ventana 0:0.001:0.1). Espectro normalizado y convertido a un solo lado (factor 2 en frecuencias intermedias). Resolucion en frecuencia = Fs/Nfft ~ 9.9 Hz.
+
+Generado automaticamente por script MATLAB - Tarea 2 Comunicaciones (INTEC).

@@ -1,0 +1,10 @@
+Archivo: 01_item06_cuadrada.pdf
+Titulo: Item 6: tren de pulsos cuadrados +5/-5 V, periodo 1 s
+
+Descripcion:
+Onda cuadrada que alterna entre +5 V y -5 V con periodo de 1 s, generada con la funcion square() del Signal Processing Toolbox escalada a 5 V, evaluada en t=0:0.001:2 s (2 ciclos completos).
+
+Parametros / notas:
+Expresion MATLAB: x6 = 5*square(2*pi*(1/1)*t). Frecuencia fundamental = 1 Hz.
+
+Generado automaticamente por script MATLAB - Tarea 2 Comunicaciones (INTEC).

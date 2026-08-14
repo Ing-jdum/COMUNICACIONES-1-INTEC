@@ -1,0 +1,26 @@
+VALORES NUMERICOS OBSERVADOS EN LA FFT - Ejercicio 4 (Simulink)
+Tarea 2 - Comunicaciones (INTEC)
+===========================================================
+
+Fs (frecuencia de muestreo del solver) = 10000 Hz
+N (numero de muestras registradas)     = 1001
+Resolucion en frecuencia (Fs/N)         = 9.9900 Hz
+StopTime de la simulacion               = 0.1000 s
+
+Picos esperados (segun formulas de diseno):
+  f =  60.0 Hz -> Amplitud esperada = 120.0 V
+  f = 120.0 Hz -> Amplitud esperada =  60.0 V
+  f = 180.0 Hz -> Amplitud esperada =  40.0 V
+  f = 240.0 Hz -> Amplitud esperada =  30.0 V
+  f = 300.0 Hz -> Amplitud esperada =  24.0 V
+  f = 360.0 Hz -> Amplitud esperada =  20.0 V
+
+Picos detectados automaticamente en la FFT simulada (findpeaks):
+  f =   59.940 Hz -> Amplitud detectada = 120.0753 V
+  f =  119.880 Hz -> Amplitud detectada =  59.9687 V
+  f =  179.820 Hz -> Amplitud detectada =  39.8979 V
+  f =  239.760 Hz -> Amplitud detectada =  29.8284 V
+  f =  299.700 Hz -> Amplitud detectada =  23.7444 V
+  f =  359.640 Hz -> Amplitud detectada =  19.6041 V
+
+Estos valores son la "verdad de campo" (ground truth) obtenida al ejecutar realmente el modelo; deben usarse para verificar si los picos caen exactamente en 60,120,180,240,300,360 Hz con las amplitudes de diseno, o si hay corrimiento/leakage/aliasing, y para refinar la respuesta de 04_simulink_notas.txt.

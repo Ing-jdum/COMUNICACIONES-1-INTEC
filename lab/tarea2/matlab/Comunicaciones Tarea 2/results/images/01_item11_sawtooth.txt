@@ -1,0 +1,10 @@
+Archivo: 01_item11_sawtooth.pdf
+Titulo: Item 11: onda diente de sierra (sawtooth), duracion 15 s
+
+Descripcion:
+Onda diente de sierra generada con la funcion sawtooth() de MATLAB, frecuencia 1 Hz, evaluada en un vector de tiempo propio t=0:0.001:15 s (15 segundos de duracion) tal como pide el enunciado.
+
+Parametros / notas:
+Expresion MATLAB: x11 = sawtooth(2*pi*1*t11), t11 = 0:0.001:15.
+
+Generado automaticamente por script MATLAB - Tarea 2 Comunicaciones (INTEC).

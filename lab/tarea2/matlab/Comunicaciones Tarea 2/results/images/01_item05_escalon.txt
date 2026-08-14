@@ -1,0 +1,10 @@
+Archivo: 01_item05_escalon.pdf
+Titulo: Item 5: escalon unitario u(t)
+
+Descripcion:
+Funcion escalon unitario u(t) = 0 para t<0, 1 para t>0, implementada con indexado logico (t>0). Se muestra sobre un rango simetrico -1:0.001:1 s para apreciar el salto, sobre el rango base 0:0.001:2 s del ejercicio, su version discretizada (stem) y su espectro de magnitud (FFT).
+
+Parametros / notas:
+Expresion MATLAB: u_t = double(t_u > 0). u(0) se definio como 0 por convencion de indexado estricto (t>0).
+
+Generado automaticamente por script MATLAB - Tarea 2 Comunicaciones (INTEC).

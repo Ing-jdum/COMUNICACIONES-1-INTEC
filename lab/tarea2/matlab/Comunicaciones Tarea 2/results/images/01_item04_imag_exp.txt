@@ -1,0 +1,10 @@
+Archivo: 01_item04_imag_exp.pdf
+Titulo: Item 4: x4(t) = Imag(X*e^{-jt}), X=3
+
+Descripcion:
+Parte imaginaria de la exponencial compleja X*e^{-jt}, equivalente a -X*sen(t), con X=3, evaluada en t=0:0.001:2 s.
+
+Parametros / notas:
+Expresion MATLAB: x4 = imag(X4*exp(-1j*t)), X4=3. Resultado algebraico: x4(t)=-3*sin(t).
+
+Generado automaticamente por script MATLAB - Tarea 2 Comunicaciones (INTEC).

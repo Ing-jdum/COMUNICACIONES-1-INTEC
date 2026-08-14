@@ -1,0 +1,10 @@
+Archivo: 03b_armonicos_superpuestos.pdf
+Titulo: Armonicos 1ro a 6to superpuestos en un mismo eje
+
+Descripcion:
+Los seis armonicos (fundamental a 6to) superpuestos en un mismo grafico, cada uno con color distinto identificado en la leyenda, para comparar visualmente sus amplitudes y frecuencias relativas. Ventana: t=0:0.001:0.1 s.
+
+Parametros / notas:
+Mismas formulas que en 03a. Amplitudes decrecientes: 120,60,40,30,24,20 V.
+
+Generado automaticamente por script MATLAB - Tarea 2 Comunicaciones (INTEC).

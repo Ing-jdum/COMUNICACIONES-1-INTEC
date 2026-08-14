@@ -1,0 +1,10 @@
+Archivo: 01_item07_exp_creciente.pdf
+Titulo: Item 7: x7(t) = -5*sin(5t)*exp(3.5t)
+
+Descripcion:
+Seno modulado por una exponencial creciente exp(3.5t), lo que produce una senal de amplitud creciente en el rango t=0:0.001:2 s. Se grafica senal continua, stem, magnitud FFT (zoom en bajas frecuencias por el ensanchamiento espectral causado por el crecimiento exponencial).
+
+Parametros / notas:
+Expresion MATLAB: x7 = -5*sin(5*t).*exp(3.5*t). Ambiguedad: el enunciado indica "X=2j" para este item, pero la formula dada ya es real y no deja un lugar claro donde insertar una escala compleja sin contradecir la expresion. Se decidio NO aplicar X y graficar la expresion literal, documentando esta ambiguedad.
+
+Generado automaticamente por script MATLAB - Tarea 2 Comunicaciones (INTEC).

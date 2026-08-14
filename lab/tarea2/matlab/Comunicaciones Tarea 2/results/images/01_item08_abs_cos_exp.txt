@@ -1,0 +1,10 @@
+Archivo: 01_item08_abs_cos_exp.pdf
+Titulo: Item 8: x8(t) = X*abs(cos(2t)*e^{-jt}), X=1.5
+
+Descripcion:
+Magnitud del producto entre cos(2t) y la exponencial compleja e^{-jt}, escalada por X=1.5. Como |e^{-jt}|=1 para todo t real, el resultado equivale a X*|cos(2t)|. Evaluada en t=0:0.001:2 s.
+
+Parametros / notas:
+Expresion MATLAB: x8 = X8*abs(cos(2*t).*exp(-1j*t)), X8=1.5.
+
+Generado automaticamente por script MATLAB - Tarea 2 Comunicaciones (INTEC).
