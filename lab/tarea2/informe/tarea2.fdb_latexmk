@@ -1,18 +1,18 @@
 # Fdb version 4
-["bibtex tarea2"] 1786711251.73619 "tarea2.aux" "tarea2.bbl" "tarea2" 1786711258.29587 0
+["bibtex tarea2"] 1786711251.73619 "tarea2.aux" "tarea2.bbl" "tarea2" 1786711360.28343 0
   "./references.bib" 1786400617 882 9ad00e81864f13b00eceb0bed734737a ""
   "C:/Users/johnd/AppData/Local/Programs/MiKTeX/bibtex/bst/ieeetran/IEEEtran.bst" 1440622569 57748 7c8250ecf02814ce6ddc0cdbb63df1dd ""
-  "tarea2.aux" 1786711255 21443 39d0b9295194a523613337cf870b5f13 "xelatex"
+  "tarea2.aux" 1786711356 21443 39d0b9295194a523613337cf870b5f13 "xelatex"
   (generated)
   "tarea2.bbl"
   "tarea2.blg"
   (rewritten before read)
-["xdvipdfmx"] 1786711256.20784 "tarea2.xdv" "tarea2.pdf" "tarea2" 1786711258.3059 0
-  "tarea2.xdv" 1786711255 722012 c172820054c31590b4272ab751d63150 "xelatex"
+["xdvipdfmx"] 1786711357.85049 "tarea2.xdv" "tarea2.pdf" "tarea2" 1786711360.29668 0
+  "tarea2.xdv" 1786711356 722084 fa9ce11cda2d860bd13a81737c971b25 "xelatex"
   (generated)
   "tarea2.pdf"
   (rewritten before read)
-["xelatex"] 1786711252.14298 "c:/Users/johnd/Documents/intec/comunicaciones/tareas/lab/tarea2/informe/tarea2.tex" "tarea2.xdv" "tarea2" 1786711258.29612 0
+["xelatex"] 1786711353.62882 "c:/Users/johnd/Documents/intec/comunicaciones/tareas/lab/tarea2/informe/tarea2.tex" "tarea2.xdv" "tarea2" 1786711360.2839 0
   "C:/Users/johnd/AppData/Local/MiKTeX/miktex/data/le/xetex/xelatex.fmt" 1776007551 27176672 df126520f2ce3874cd679f16c9cadfca ""
   "C:/Users/johnd/AppData/Local/Programs/MiKTeX/fonts/tfm/adobe/zapfding/pzdr.tfm" 1136786654 1528 7e12f4c0fcf5a072cebdcfbfc610f54c ""
   "C:/Users/johnd/AppData/Local/Programs/MiKTeX/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1233951848 1004 54797486969f23fa377b128694d548df ""
@@ -220,7 +220,7 @@
   "C:/Users/johnd/AppData/Local/Programs/MiKTeX/tex/latex/url/url.sty" 1388490452 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "C:/Users/johnd/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1729265222 55384 b454dec21c2d9f45ec0b793f0995b992 ""
   "IEEEtran.cls" 1786151178 281957 5b2e4fa15b0f7eabb840ebf67df4c0f7 ""
-  "c:/Users/johnd/Documents/intec/comunicaciones/tareas/lab/tarea2/informe/tarea2.tex" 1786711247 81337 3dd11c47f28b6aa4dd6a3cb1b27ebec0 ""
+  "c:/Users/johnd/Documents/intec/comunicaciones/tareas/lab/tarea2/informe/tarea2.tex" 1786711352 81337 f988741b9d3515b0382e219e598efc3c ""
   "images/01_item01_uno_menos_sen.pdf" 1786400371 95546 db5b56ead7a459093f886c19bead4f4f ""
   "images/01_item02_Sa.pdf" 1786400370 77535 6942313b6fc0ac50da8b8702a6bd90ce ""
   "images/01_item03_real_exp.pdf" 1786400371 96930 adf093d00fc089943996a38040889791 ""
@@ -246,10 +246,10 @@
   "images/05c_labview_aliasing.png" 1786706525 357869 863524e16625250f6ebc3abe63f54178 ""
   "images/05d_labview_diagrama_suma.png" 1786706525 116788 ad4dda7cafbd70f482eca517f6b498e8 ""
   "images/05e_labview_espectro_suma.png" 1786706525 155617 5f6738a044a270f7ae020fdb48b5143c ""
-  "tarea2.aux" 1786711255 21443 39d0b9295194a523613337cf870b5f13 "xelatex"
+  "tarea2.aux" 1786711356 21443 39d0b9295194a523613337cf870b5f13 "xelatex"
   "tarea2.bbl" 1786711252 1629 8a4f435f9a88611c1730579ee18bc112 "bibtex tarea2"
-  "tarea2.out" 1786711255 9716 4c1ba9a4299863988e66b6878a4187a4 "xelatex"
-  "tarea2.tex" 1786711247 81337 3dd11c47f28b6aa4dd6a3cb1b27ebec0 ""
+  "tarea2.out" 1786711356 9716 4c1ba9a4299863988e66b6878a4187a4 "xelatex"
+  "tarea2.tex" 1786711352 81337 f988741b9d3515b0382e219e598efc3c ""
   (generated)
   "tarea2.aux"
   "tarea2.log"
